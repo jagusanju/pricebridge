@@ -1,5 +1,5 @@
 {
-  "_readme": "Product list for the price updater. 'source' products are scraped automatically from official stores by scripts/update_prices.py. Products with \"basis\": \"store\" use one store page per variant and country (type jsonld or shopify); a country with {\"manual\": value} uses that hand-entered price.",
+  "_readme": "Product list for scripts/update_prices.py. Apple/Samsung products ('source') are read from the official stores in all six countries (in, us, ae, sg, uk, th). Products with \"basis\": \"store\" list one page per variant and country (type jsonld or shopify); {\"manual\": value} is a hand-entered price. 'compat' notes appear under 'Will it work in India?' - cc is a country code, a list, or \"*\" for all.",
   "products": [
     {
       "id": "iphone-18-pro-max",
@@ -20,6 +20,28 @@
         "512GB",
         "1TB",
         "2TB"
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US iPhones are eSIM-only (no SIM tray). Jio, Airtel and Vi all support eSIM."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "Physical SIM + eSIM, same as the Indian model."
+        },
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Apple's iPhone warranty is honoured in India."
+        }
       ]
     },
     {
@@ -44,6 +66,28 @@
         "512GB",
         "1TB",
         "2TB"
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US iPhones are eSIM-only (no SIM tray). Jio, Airtel and Vi all support eSIM."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "Physical SIM + eSIM, same as the Indian model."
+        },
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Apple's iPhone warranty is honoured in India."
+        }
       ]
     },
     {
@@ -65,6 +109,28 @@
         "512GB",
         "1TB",
         "2TB"
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US iPhones are eSIM-only (no SIM tray). Jio, Airtel and Vi all support eSIM."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "Physical SIM + eSIM, same as the Indian model."
+        },
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Apple's iPhone warranty is honoured in India."
+        }
       ]
     },
     {
@@ -85,6 +151,18 @@
         "256GB",
         "512GB",
         "1TB"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "eSIM-only in every country. Jio, Airtel and Vi all support eSIM."
+        },
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Apple's iPhone warranty is honoured in India."
+        }
       ]
     },
     {
@@ -104,6 +182,28 @@
       "variants": [
         "256GB",
         "512GB"
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US iPhones are eSIM-only (no SIM tray). Jio, Airtel and Vi all support eSIM."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "Physical SIM + eSIM, same as the Indian model."
+        },
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Apple's iPhone warranty is honoured in India."
+        }
       ]
     },
     {
@@ -123,6 +223,28 @@
       "variants": [
         "256GB",
         "512GB"
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US iPhones are eSIM-only (no SIM tray). Jio, Airtel and Vi all support eSIM."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "Physical SIM + eSIM, same as the Indian model."
+        },
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Apple's iPhone warranty is honoured in India."
+        }
       ]
     },
     {
@@ -134,14 +256,114 @@
       "note": "Samsung warranty is country-specific - US units may not be serviced under warranty in India.",
       "source": {
         "type": "samsung",
-        "us": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/buy/",
-        "in": "https://www.samsung.com/in/smartphones/galaxy-s26-ultra/buy/",
-        "inModelPrefix": "SM-S948"
+        "slug": "galaxy-s26-ultra",
+        "model": "SM-S948"
       },
       "variants": [
         "256GB",
         "512GB",
         "1TB"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Samsung warranty is country-specific — repairs in India may be charged."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US models may not support every Indian 5G band — check before buying."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "International (dual-SIM) model — works on Indian networks."
+        }
+      ]
+    },
+    {
+      "id": "galaxy-z-fold8",
+      "name": "Galaxy Z Fold8",
+      "brand": "Samsung",
+      "category": "phone",
+      "gst": 18,
+      "note": "Samsung warranty is country-specific.",
+      "source": {
+        "type": "samsung",
+        "slug": "galaxy-z-fold8",
+        "model": "SM-F9"
+      },
+      "variants": [
+        "256GB",
+        "512GB",
+        "1TB"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Samsung warranty is country-specific — repairs in India may be charged."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US models may not support every Indian 5G band — check before buying."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "International (dual-SIM) model — works on Indian networks."
+        }
+      ]
+    },
+    {
+      "id": "galaxy-z-flip8",
+      "name": "Galaxy Z Flip8",
+      "brand": "Samsung",
+      "category": "phone",
+      "gst": 18,
+      "note": "Samsung warranty is country-specific.",
+      "source": {
+        "type": "samsung",
+        "slug": "galaxy-z-flip8",
+        "model": "SM-F7"
+      },
+      "variants": [
+        "256GB",
+        "512GB"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Samsung warranty is country-specific — repairs in India may be charged."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US models may not support every Indian 5G band — check before buying."
+        },
+        {
+          "cc": [
+            "ae",
+            "sg",
+            "uk",
+            "th"
+          ],
+          "level": "ok",
+          "text": "International (dual-SIM) model — works on Indian networks."
+        }
       ]
     },
     {
@@ -168,7 +390,57 @@
         "1TB",
         "2TB"
       ],
-      "suffix": " Wi-Fi"
+      "suffix": " Wi-Fi",
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Wi-Fi iPads work the same in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Warranty repairs may be limited to the country of purchase."
+        }
+      ]
+    },
+    {
+      "id": "ipad-pro-13",
+      "name": "iPad Pro 13\" (M5)",
+      "brand": "Apple",
+      "category": "tablet",
+      "gst": 18,
+      "note": "iPad warranty service is limited to the country of purchase.",
+      "source": {
+        "type": "apple_metrics",
+        "path": "/shop/buy-ipad/ipad-pro",
+        "require": [
+          "13-inch iPad Pro"
+        ],
+        "exclude": [
+          "Cellular",
+          "nano"
+        ]
+      },
+      "variants": [
+        "256GB",
+        "512GB",
+        "1TB",
+        "2TB"
+      ],
+      "suffix": " Wi-Fi",
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Wi-Fi iPads work the same in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Warranty repairs may be limited to the country of purchase."
+        }
+      ]
     },
     {
       "id": "ipad-air-11",
@@ -193,7 +465,19 @@
         "512GB",
         "1TB"
       ],
-      "suffix": " Wi-Fi"
+      "suffix": " Wi-Fi",
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Wi-Fi iPads work the same in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Warranty repairs may be limited to the country of purchase."
+        }
+      ]
     },
     {
       "id": "ipad-a16",
@@ -220,7 +504,19 @@
         "256GB",
         "512GB"
       ],
-      "suffix": " Wi-Fi"
+      "suffix": " Wi-Fi",
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Wi-Fi iPads work the same in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Warranty repairs may be limited to the country of purchase."
+        }
+      ]
     },
     {
       "id": "ipad-mini",
@@ -245,7 +541,19 @@
         "256GB",
         "512GB"
       ],
-      "suffix": " Wi-Fi"
+      "suffix": " Wi-Fi",
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Wi-Fi iPads work the same in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Warranty repairs may be limited to the country of purchase."
+        }
+      ]
     },
     {
       "id": "macbook-air",
@@ -270,6 +578,43 @@
         {
           "label": "15\"",
           "key": "^15inch-[a-z]+-10-10$"
+        }
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "ok",
+          "text": "US English keyboard — same layout as Indian Macs."
+        },
+        {
+          "cc": "sg",
+          "level": "ok",
+          "text": "US English keyboard — same layout as Indian Macs."
+        },
+        {
+          "cc": "uk",
+          "level": "warn",
+          "text": "British keyboard layout (different @, \" and £ keys)."
+        },
+        {
+          "cc": "ae",
+          "level": "warn",
+          "text": "Keyboard usually has Arabic + English keys."
+        },
+        {
+          "cc": "th",
+          "level": "warn",
+          "text": "Keyboard usually has Thai + English keys."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "The charger plug won't fit Indian sockets — use a travel adapter (voltage is fine)."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Mac warranty repairs may be limited to the country of purchase."
         }
       ]
     },
@@ -297,6 +642,43 @@
           "label": "16\" M5 Pro",
           "key": "^16inch-[a-z]+-standard-m5pro-18-20$"
         }
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "ok",
+          "text": "US English keyboard — same layout as Indian Macs."
+        },
+        {
+          "cc": "sg",
+          "level": "ok",
+          "text": "US English keyboard — same layout as Indian Macs."
+        },
+        {
+          "cc": "uk",
+          "level": "warn",
+          "text": "British keyboard layout (different @, \" and £ keys)."
+        },
+        {
+          "cc": "ae",
+          "level": "warn",
+          "text": "Keyboard usually has Arabic + English keys."
+        },
+        {
+          "cc": "th",
+          "level": "warn",
+          "text": "Keyboard usually has Thai + English keys."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "The charger plug won't fit Indian sockets — use a travel adapter (voltage is fine)."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Mac warranty repairs may be limited to the country of purchase."
+        }
       ]
     },
     {
@@ -319,6 +701,48 @@
           "label": "46mm GPS",
           "key": "^watch_cases-aluminum-46mm-gps$"
         }
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "GPS models work normally in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Some health features depend on regional approval."
+        }
+      ]
+    },
+    {
+      "id": "apple-watch-ultra",
+      "name": "Apple Watch Ultra 4",
+      "brand": "Apple",
+      "category": "wearable",
+      "gst": 18,
+      "note": "Titanium case, 49mm.",
+      "source": {
+        "type": "apple_pricekey",
+        "path": "/shop/buy-watch/apple-watch-ultra"
+      },
+      "variants": [
+        {
+          "label": "49mm",
+          "key": "^watch_cases-49mm$"
+        }
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "GPS models work normally in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Some health features depend on regional approval."
+        }
       ]
     },
     {
@@ -334,6 +758,57 @@
       },
       "variants": [
         "USB-C"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Work the same in every country."
+        }
+      ]
+    },
+    {
+      "id": "airpods-5",
+      "name": "AirPods 5",
+      "brand": "Apple",
+      "category": "audio",
+      "gst": 18,
+      "note": "Base model.",
+      "source": {
+        "type": "apple_product",
+        "path": "/shop/buy-airpods/airpods-4"
+      },
+      "variants": [
+        "Standard"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Work the same in every country."
+        }
+      ]
+    },
+    {
+      "id": "airpods-max-2",
+      "name": "AirPods Max 2",
+      "brand": "Apple",
+      "category": "audio",
+      "gst": 18,
+      "note": "Over-ear headphones.",
+      "source": {
+        "type": "apple_product",
+        "path": "/shop/buy-airpods/airpods-max-2"
+      },
+      "variants": [
+        "USB-C"
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Work the same in every country."
+        }
       ]
     },
     {
@@ -371,6 +846,23 @@
             "sku": "OLED65C6PLA"
           }
         }
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "Many US TVs are rated 110–120 V — check the label; you may need a step-down transformer for India's 230 V."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US broadcast tuner (ATSC) doesn't receive Indian channels — streaming apps and set-top boxes work."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "No India warranty, and carrying a large TV as baggage is expensive."
+        }
       ]
     },
     {
@@ -394,6 +886,23 @@
             "page": "https://www.samsung.com/in/tvs/qled-tv/qn90f-65-inch-neo-qled-4k-mini-led-smart-tv-qa65qn90faulxl/"
           }
         }
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "Many US TVs are rated 110–120 V — check the label; you may need a step-down transformer for India's 230 V."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US broadcast tuner (ATSC) doesn't receive Indian channels — streaming apps and set-top boxes work."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "No India warranty, and carrying a large TV as baggage is expensive."
+        }
       ]
     },
     {
@@ -416,6 +925,23 @@
             "url": "https://shopatsc.com/products/k-65xr80m2-in5"
           }
         }
+      ],
+      "compat": [
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "Many US TVs are rated 110–120 V — check the label; you may need a step-down transformer for India's 230 V."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "US broadcast tuner (ATSC) doesn't receive Indian channels — streaming apps and set-top boxes work."
+        },
+        {
+          "cc": "us",
+          "level": "warn",
+          "text": "No India warranty, and carrying a large TV as baggage is expensive."
+        }
       ]
     },
     {
@@ -437,6 +963,18 @@
             "type": "shopify",
             "url": "https://shopatsc.com/products/wh-1000xm6-bm-in"
           }
+        }
+      ],
+      "compat": [
+        {
+          "cc": "*",
+          "level": "ok",
+          "text": "Work the same in India."
+        },
+        {
+          "cc": "*",
+          "level": "warn",
+          "text": "Sony warranty is country-specific."
         }
       ]
     }

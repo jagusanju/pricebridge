@@ -3,22 +3,33 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>PriceBridge — India vs US Electronics Prices</title>
-  <meta name="description" content="Compare iPhone, iPad, MacBook, smart TV and gadget prices between India and the US, including GST, US sales tax, exchange rate and customs duty." />
+  <title>PriceBridge — Is it cheaper abroad? iPhone, iPad, Mac & TV prices: India vs US, Dubai, Singapore, UK, Thailand</title>
+  <meta name="description" content="Compare iPhone, iPad, MacBook, Galaxy, smart TV and gadget prices in India vs the US, Dubai, Singapore, the UK and Thailand — with GST, VAT, sales tax, tourist refunds, live exchange rates and Indian customs duty. Prices checked from official stores every 6 hours." />
+  <link rel="canonical" href="https://pricebridge.co.in/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PriceBridge" />
+  <meta property="og:title" content="PriceBridge — Is it cheaper to buy it abroad?" />
+  <meta property="og:description" content="iPhone, iPad, Mac, Galaxy & TV prices in India vs US, Dubai, Singapore, UK and Thailand — with every tax, tourist refund and customs duty worked out." />
+  <meta property="og:url" content="https://pricebridge.co.in/" />
+  <meta property="og:image" content="https://pricebridge.co.in/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=4" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%236d5efc'/><path d='M9 20l5-5 4 4 6-7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PriceBridge","url":"https://pricebridge.co.in/","description":"Compare electronics prices between India and the US, UAE, Singapore, UK and Thailand including all taxes and customs duty."}</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="topbar">
     <div class="container topbar__inner">
-      <a class="brand" href="#" aria-label="PriceBridge home">
+      <a class="brand" href="./" aria-label="PriceBridge home">
         <span class="brand__logo" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 4 7-8" /></svg>
         </span>
@@ -26,10 +37,14 @@
       </a>
 
       <div class="topbar__actions">
-        <div class="rate-pill" id="ratePill" title="Live USD to INR exchange rate">
+        <div class="rate-pill" id="ratePill" title="Live exchange rate">
           <span class="rate-pill__dot" id="rateDot"></span>
-          <span>$1 = <strong id="rateText">₹—</strong></span>
+          <span id="rateText">—</span>
         </div>
+        <button class="icon-btn basket-btn" id="basketBtn" aria-label="Open trip basket" title="Trip basket">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.5 11h-11z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="basket-btn__count" id="basketCount" hidden>0</span>
+        </button>
         <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
           <svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
           <svg class="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -41,13 +56,13 @@
   <main id="main">
     <section class="hero">
       <div class="container">
-        <span class="eyebrow">🇮🇳 India &nbsp;vs&nbsp; 🇺🇸 United States</span>
-        <h1>Is it cheaper to buy it<br /><span class="grad">in the US or in India?</span></h1>
-        <p class="hero__sub">Real landed cost for iPhones, iPads, MacBooks, smart TVs and more — with GST, US sales tax, live exchange rate and Indian customs duty all worked out.</p>
+        <span class="eyebrow">🇮🇳 India vs 🇺🇸 🇦🇪 🇸🇬 🇬🇧 🇹🇭</span>
+        <h1>Is it cheaper to buy it<br /><span class="grad">abroad or in India?</span></h1>
+        <p class="hero__sub">Real landed cost for iPhones, iPads, Macs, Galaxy phones, TVs and more — with GST, VAT, sales tax, tourist refunds, live exchange rates and Indian customs duty all worked out.</p>
 
         <div class="search">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input id="search" type="search" placeholder="Search iPhone 18 Pro, OLED TV, iPad…" autocomplete="off" aria-label="Search products" />
+          <input id="search" type="search" placeholder="Search iPhone 18 Pro, Fold8, MacBook…" autocomplete="off" aria-label="Search products" />
           <kbd>/</kbd>
         </div>
 
@@ -56,18 +71,17 @@
       </div>
     </section>
 
+    <section class="container" aria-label="Country to compare">
+      <div class="country-bar">
+        <span class="country-bar__label">Compare India with</span>
+        <div class="country-chips" id="countryChips" role="tablist"></div>
+      </div>
+    </section>
+
     <section class="container controls" aria-label="Calculation settings">
-      <div class="control">
+      <div class="control" id="stateControl">
         <label for="stateSelect">US state (sales tax)</label>
         <select id="stateSelect"></select>
-      </div>
-      <div class="control">
-        <label for="rateInput">USD → INR rate</label>
-        <div class="input-affix">
-          <span>₹</span>
-          <input id="rateInput" type="number" step="0.01" min="1" inputmode="decimal" />
-          <button class="link-btn" id="rateReset" type="button" title="Use live rate">Live</button>
-        </div>
       </div>
       <div class="control">
         <label for="forexInput">Card forex fee</label>
@@ -75,6 +89,16 @@
           <input id="forexInput" type="number" step="0.25" min="0" max="10" inputmode="decimal" />
           <span>%</span>
         </div>
+      </div>
+      <div class="control control--toggle">
+        <label class="switch">
+          <input type="checkbox" id="refundToggle" />
+          <span class="switch__track"><span class="switch__thumb"></span></span>
+          <span class="switch__text">
+            <strong>Claim tourist tax refund</strong>
+            <small>Dubai, Singapore &amp; Thailand</small>
+          </span>
+        </label>
       </div>
       <div class="control control--toggle">
         <label class="switch">
@@ -93,7 +117,7 @@
       <div class="sort">
         <label for="sortSelect" class="sr-only">Sort by</label>
         <select id="sortSelect">
-          <option value="savings">Biggest US savings</option>
+          <option value="savings">Biggest savings abroad</option>
           <option value="savingsPct">Biggest savings %</option>
           <option value="priceAsc">India price: low → high</option>
           <option value="priceDesc">India price: high → low</option>
@@ -106,8 +130,8 @@
       <div class="grid" id="grid" aria-live="polite"></div>
       <div class="empty" id="empty" hidden>
         <div class="empty__icon">🔍</div>
-        <h3>No products found</h3>
-        <p>Try a different search or category.</p>
+        <h3 id="emptyTitle">No products found</h3>
+        <p id="emptyText">Try a different search or category.</p>
       </div>
     </section>
 
@@ -116,31 +140,35 @@
       <div class="info__grid">
         <article>
           <span class="info__num">1</span>
-          <h3>US price + sales tax</h3>
-          <p>US prices are listed <em>before</em> tax. We add the average combined state + local sales tax for the state you pick. Tourists can't claim it back.</p>
+          <h3>Store price + local tax</h3>
+          <p>Prices abroad already include VAT/GST — except the US, where we add the sales tax of the state you pick.</p>
         </article>
         <article>
           <span class="info__num">2</span>
-          <h3>Convert to rupees</h3>
-          <p>We use the live USD→INR mid-market rate, plus any forex markup your card charges (typically 0–3.5%).</p>
+          <h3>Tourist refund (optional)</h3>
+          <p>Dubai, Singapore and Thailand give tourists part of the VAT back at the airport. The UK and US don't.</p>
         </article>
         <article>
           <span class="info__num">3</span>
-          <h3>Customs (optional)</h3>
-          <p>Bringing it home? Each adult gets a ₹50,000 duty-free allowance. Anything above is charged ~38.5% duty.</p>
+          <h3>Convert to rupees</h3>
+          <p>Live mid-market exchange rates, plus any forex markup your card charges (typically 0–3.5%).</p>
         </article>
         <article>
           <span class="info__num">4</span>
-          <h3>India price incl. GST</h3>
-          <p>Indian MRPs already include GST (18% for these products). We split out the base price so you can compare like-for-like.</p>
+          <h3>Customs (optional)</h3>
+          <p>Each adult can bring ₹50,000 of goods duty-free. Above that, about 38.5% duty. Use the trip basket to add up several items.</p>
         </article>
       </div>
-      <p class="disclaimer">Prices are read automatically from the official Apple, Samsung, LG and Sony stores in the US and India (last run: <span id="updated"></span>). Apple and Samsung phones are compared on list price / MRP; TVs and Sony products on each store’s current selling price. Where a store can’t be read automatically (Sony US, Samsung India TVs), that price is entered by hand and labelled. Bank offers, sales, exchange deals and local taxes vary. Customs rules are simplified — check CBIC guidelines before travelling. Product images © their respective manufacturers.</p>
+
+      <h2 class="info__h2">Tax &amp; refund rules by country</h2>
+      <div class="table-wrap"><table class="cmp cmp--rules" id="rulesTable"></table></div>
+
+      <p class="disclaimer">Prices are read automatically from the official Apple, Samsung, LG and Sony stores (last run: <span id="updated"></span>). iPhones, iPads, Macs and Galaxy phones are compared on official list price; TVs and Sony products on each store's current selling price. Where a store can't be read automatically, that price is entered by hand and labelled. Bank offers, sales and exchange deals vary. Tourist refund and customs rules are simplified — check official guidance before you travel. Product images © their respective manufacturers.</p>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="container">© <span id="year"></span> PriceBridge · Made for smart shoppers</div>
+    <div class="container">© <span id="year"></span> PriceBridge · Made for smart shoppers · <a href="sitemap.xml">All products</a></div>
   </footer>
 
   <!-- Compare tray -->
@@ -152,20 +180,14 @@
     </div>
   </div>
 
-  <!-- Detail dialog -->
-  <dialog class="sheet" id="detailDialog" aria-labelledby="detailTitle">
-    <div class="sheet__body" id="detailBody"></div>
-  </dialog>
-
-  <!-- Compare dialog -->
-  <dialog class="sheet sheet--wide" id="compareDialog" aria-labelledby="compareTitle">
-    <div class="sheet__body" id="compareBody"></div>
-  </dialog>
+  <dialog class="sheet" id="detailDialog" aria-labelledby="detailTitle"><div class="sheet__body" id="detailBody"></div></dialog>
+  <dialog class="sheet sheet--wide" id="compareDialog" aria-labelledby="compareTitle"><div class="sheet__body" id="compareBody"></div></dialog>
+  <dialog class="sheet" id="basketDialog" aria-labelledby="basketTitle"><div class="sheet__body" id="basketBody"></div></dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=2"></script>
+  <script src="data.js?v=4"></script>
   <script src="prices.js"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

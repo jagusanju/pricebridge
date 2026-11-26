@@ -15,7 +15,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -23,18 +23,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Fetch latest prices from official stores
+      - name: Fetch latest prices from official stores (6 countries)
         run: python3 scripts/update_prices.py
 
-      - name: Commit if anything changed
+      - name: Commit updated prices, history, product pages and sitemap
         run: |
           git config user.name "price-bot"
           git config user.email "price-bot@users.noreply.github.com"
-          git add prices.js
-          # generatedAt changes on every run; only commit when a price, image or source changed
-          if git diff --cached -U0 prices.js | grep -E '^[+-] ' | grep -vqE '"(generatedAt|usdChecked|inrChecked)"'; then
-            git commit -m "Update prices $(date -u +'%Y-%m-%d %H:%M UTC')"
-          else
-            git commit -m "Refresh price check timestamps" || true
-          fi
+          git add prices.js history.json sitemap.xml p/
+          git commit -m "Update prices $(date -u +'%Y-%m-%d %H:%M UTC')" || echo "Nothing to commit"
           git push
