@@ -14,13 +14,24 @@
     if (s < 86400) return `${Math.round(s / 3600)} h ago`;
     return `${Math.round(s / 86400)} d ago`;
   }
-  const isStale = (p, v) => p.mode !== "live" || v.stale || (Date.now() - new Date(v.usdChecked || 0)) > 3 * 86400e3;
+  const OLD = 3 * 86400e3;
   function badgeHTML(p, v) {
-    if (p.mode !== "live") return `<span class="badge badge--manual" title="Entered by hand — not checked automatically">Manual price</span>`;
-    const t = v.usdChecked < v.inrChecked ? v.usdChecked : v.inrChecked;
-    return isStale(p, v)
-      ? `<span class="badge badge--stale" title="Last successful check">Checked ${ago(t)}</span>`
-      : `<span class="badge badge--live" title="Read from the official stores">Live · ${ago(t)}</span>`;
+    const checks = [v.usdChecked, v.inrChecked].filter(Boolean).sort();
+    if (!checks.length) return `<span class="badge badge--manual" title="Entered by hand — not checked automatically">Manual price</span>`;
+    const t = checks[0];
+    if (v.stale || Date.now() - new Date(t) > OLD)
+      return `<span class="badge badge--stale" title="Last successful check">Checked ${ago(t)}</span>`;
+    if (checks.length === 1) {
+      const live = v.inrChecked ? "India" : "US";
+      return `<span class="badge badge--partial" title="${live} price is read from the official store; the other is entered by hand">${live} live · ${ago(t)}</span>`;
+    }
+    return `<span class="badge badge--live" title="Read from the official stores">Live · ${ago(t)}</span>`;
+  }
+  function srcRow(label, url, checked, manual) {
+    if (!url) return "";
+    const h = host(url) + (/\/in(\/|$)/.test(new URL(url).pathname) ? "/in" : "");
+    const when = manual ? " · entered by hand" : checked ? ` · ${ago(checked)}` : "";
+    return `<div class="row"><span>${label}</span><span><a href="${esc(url)}" target="_blank" rel="noopener">${esc(h)} ↗</a>${when}</span></div>`;
   }
   const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } };
   function mediaHTML(p, cls = "media") {
@@ -231,7 +242,7 @@
 
       <div class="breakdown">
         <div class="breakdown__title">🇺🇸 Buying in the US <small>${esc(st ? st.name : "")}</small></div>
-        <div class="row"><span>List price (pre-tax)</span><span>${usd(c.v.usd)}</span></div>
+        <div class="row"><span>${p.basis === "store" ? "Store price" : "List price"} (pre-tax)</span><span>${usd(c.v.usd)}</span></div>
         <div class="row"><span>Sales tax (${c.tr}%)</span><span>+ ${usd(c.usTax)}</span></div>
         <div class="row"><span>Total in USD</span><span>${usd(c.usTotal)}</span></div>
         <div class="row row--muted"><span>Rate ₹${state.rate.toFixed(2)}${state.forexFee ? ` + ${state.forexFee}% forex fee` : ""}</span><span>₹${c.fx.toFixed(2)} / $</span></div>
@@ -243,10 +254,10 @@
       </div>
 
       <div class="breakdown">
-        <div class="breakdown__title">🇮🇳 Buying in India <small>MRP incl. GST</small></div>
+        <div class="breakdown__title">🇮🇳 Buying in India <small>${p.basis === "store" ? "store price" : "MRP"} incl. GST</small></div>
         <div class="row"><span>Base price (excl. GST)</span><span>${inr(c.inBase)}</span></div>
         <div class="row"><span>GST (${p.gst}%)</span><span>+ ${inr(c.gstAmt)}</span></div>
-        <div class="row row--total"><span>MRP</span><span>${inr(c.v.inr)}</span></div>
+        <div class="row row--total"><span>${p.basis === "store" ? "Store price" : "MRP"}</span><span>${inr(c.v.inr)}</span></div>
       </div>
 
       <div class="breakdown">
@@ -258,11 +269,16 @@
 
       <div class="breakdown">
         <div class="breakdown__title">🔗 Price sources ${badgeHTML(p, c.v)}</div>
-        ${p.sourceUS ? `<div class="row"><span>US price</span><span><a href="${esc(p.sourceUS)}" target="_blank" rel="noopener">${esc(host(p.sourceUS))} ↗</a>${c.v.usdChecked ? ` · ${ago(c.v.usdChecked)}` : ""}</span></div>` : ""}
-        ${p.sourceIN ? `<div class="row"><span>India price</span><span><a href="${esc(p.sourceIN)}" target="_blank" rel="noopener">${esc(host(p.sourceIN))}${p.sourceIN.includes("/in/") ? "/in" : ""} ↗</a>${c.v.inrChecked ? ` · ${ago(c.v.inrChecked)}` : ""}</span></div>` : ""}
+        ${srcRow("US price", c.v.usdSrc || p.sourceUS, c.v.usdChecked, c.v.usdManual)}
+        ${srcRow("India price", c.v.inrSrc || p.sourceIN, c.v.inrChecked, c.v.inrManual)}
+        ${p.basis === "store" ? `<div class="row row--muted"><span>Compared on the current selling price at each official store</span><span></span></div>` : ""}
+        ${c.v.usdList ? `<div class="row row--muted"><span>US list price (MSRP)</span><span>${usd(c.v.usdList)}</span></div>` : ""}
+        ${c.v.inrList ? `<div class="row row--muted"><span>India MRP</span><span>${inr(c.v.inrList)}</span></div>` : ""}
         ${c.v.usdSale ? `<div class="row row--muted"><span>US sale price right now</span><span>${usd(c.v.usdSale)}</span></div>` : ""}
         ${c.v.inrSale ? `<div class="row row--muted"><span>India sale price right now</span><span>${inr(c.v.inrSale)}</span></div>` : ""}
-        ${p.mode !== "live" ? `<div class="row row--muted"><span>This price is entered by hand and may be out of date — check the store before buying.</span><span></span></div>` : ""}
+        ${c.v.usdOutOfStock ? `<div class="row row--muted"><span>⚠️ Currently out of stock on the US store</span><span></span></div>` : ""}
+        ${c.v.inrOutOfStock ? `<div class="row row--muted"><span>⚠️ Currently out of stock on the India store</span><span></span></div>` : ""}
+        ${(c.v.usdManual || c.v.inrManual || p.mode === "manual") ? `<div class="row row--muted"><span>Prices marked “entered by hand” are not checked automatically and may be out of date — check the store before buying.</span><span></span></div>` : ""}
       </div>
 
       ${p.note ? `<div class="note"><span>💡</span><span><b>Good to know:</b> ${esc(p.note)}</span></div>` : ""}
@@ -461,7 +477,7 @@
     const gen = P.generatedAt ? new Date(P.generatedAt) : null;
     $("#updated").textContent = gen ? gen.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "—";
     $("#freshness").innerHTML = gen
-      ? `<span class="rate-pill__dot ${Date.now() - gen < 2 * 86400e3 ? "is-live" : ""}"></span> Prices checked ${ago(P.generatedAt)} from apple.com &amp; samsung.com`
+      ? `<span class="rate-pill__dot ${Date.now() - gen < 2 * 86400e3 ? "is-live" : ""}"></span> Prices checked ${ago(P.generatedAt)} from official Apple, Samsung, LG &amp; Sony stores`
       : "Price data not loaded — run scripts/update_prices.py";
     $("#year").textContent = new Date().getFullYear();
   }

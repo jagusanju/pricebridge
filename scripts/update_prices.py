@@ -40,7 +40,10 @@ def fetch(url):
     last = None
     for attempt in range(3):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "en"})
+            req = urllib.request.Request(url, headers={
+                "User-Agent": UA,
+                "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9"})
             with urllib.request.urlopen(req, timeout=40) as r:
                 html = r.read().decode("utf-8", "ignore")
             _cache[url] = html
@@ -175,6 +178,119 @@ def samsung(src, p, country):
     return out, url, img, sale
 
 
+# ---------------------------------------------------------------- store-price products
+# One page per variant. Returns the store's CURRENT selling price, plus the
+# MRP / list ("strikethrough") price when the store shows one.
+def _walk(node):
+    if isinstance(node, dict):
+        yield node
+        for v in node.values():
+            yield from _walk(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _walk(v)
+
+
+def jsonld_offer(spec):
+    """schema.org Product data (LG, Samsung). Match the product by sku/mpn when given."""
+    html = fetch(spec["url"])
+    want = (spec.get("sku") or "").upper()
+    for block in re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S):
+        try:
+            data = json.loads(block.strip())
+        except ValueError:
+            continue
+        for node in _walk(data):
+            if "Product" not in str(node.get("@type")) and "IndividualProduct" not in str(node.get("@type")):
+                continue
+            ids = {str(node.get(k) or "").upper() for k in ("sku", "mpn")}
+            if want and not any(i.startswith(want) for i in ids if i):
+                continue
+            offer = node.get("offers")
+            if isinstance(offer, list):
+                offer = offer[0] if offer else None
+            if not isinstance(offer, dict) or not offer.get("price"):
+                continue
+            price = float(offer["price"])
+            if price <= 0:
+                continue
+            mrp = None
+            specs = offer.get("priceSpecification") or []
+            for ps in specs if isinstance(specs, list) else [specs]:
+                if "Strikethrough" in str(ps.get("priceType")) and float(ps.get("price") or 0) > price:
+                    mrp = float(ps["price"])
+            img = node.get("image")
+            img = img[0] if isinstance(img, list) else (img.get("url") if isinstance(img, dict) else img)
+            if img and img.startswith("//"):
+                img = "https:" + img
+            return {"price": price, "list": mrp, "image": img,
+                    "inStock": "InStock" in str(offer.get("availability", "InStock"))}
+    raise RuntimeError(f"no matching product data for {want or spec['url']}")
+
+
+def shopify(spec):
+    """Shopify stores (Sony India: shopatsc.com) expose /products/<handle>.json."""
+    url = spec["url"].rstrip("/")
+    data = json.loads(fetch(url + ".json"))["product"]
+    v = data["variants"][0]
+    price = float(v["price"])
+    mrp = float(v["compare_at_price"]) if v.get("compare_at_price") and float(v["compare_at_price"]) > price else None
+    img = (data.get("image") or {}).get("src")
+    return {"price": price, "list": mrp, "image": img, "inStock": v.get("available", True) is not False}
+
+
+STORE_PARSERS = {"jsonld": jsonld_offer, "shopify": shopify}
+
+
+def store_product(p, old, stamp, problems):
+    """Products compared on official-store selling price, one source page per variant & country.
+    A country without a readable store keeps a hand-entered value ("manual")."""
+    old_vars = {v["label"]: v for v in old.get("variants", [])}
+    image, variants, live_count, total = None, [], 0, 0
+    for var in p["variants"]:
+        ov = old_vars.get(var["label"], {})
+        out = {"label": var["label"]}
+        for cc, cur in (("us", "usd"), ("in", "inr")):
+            spec = var.get(cc) or {}
+            total += 1
+            if spec.get("url"):
+                try:
+                    r = STORE_PARSERS[spec.get("type", "jsonld")](spec)
+                    out[cur] = r["price"]
+                    out[cur + "Checked"] = stamp
+                    out[cur + "Src"] = spec["url"]
+                    if r.get("list"):
+                        out[cur + "List"] = r["list"]
+                    if not r.get("inStock", True):
+                        out[cur + "OutOfStock"] = True
+                    image = image or r.get("image")
+                    live_count += 1
+                    continue
+                except Exception as e:  # noqa: BLE001
+                    problems.append(f"{p['id']} {var['label']} [{cc}]: {e}")
+                    if ov.get(cur) is not None and ov.get(cur + "Checked"):
+                        for k in (cur, cur + "Checked", cur + "Src", cur + "List"):
+                            if ov.get(k) is not None:
+                                out[k] = ov[k]
+                        out["stale"] = True
+                        live_count += 1
+                        continue
+            if spec.get("manual") is not None:
+                out[cur] = spec["manual"]
+                out[cur + "Manual"] = True
+                out[cur + "Src"] = spec.get("page")
+        if out.get("usd") is None or out.get("inr") is None:
+            problems.append(f"{p['id']} {var['label']}: no price for one country, variant skipped")
+            continue
+        variants.append(out)
+    if not variants:
+        return None
+    base = {k: p[k] for k in ("id", "name", "brand", "category", "gst", "note") if k in p}
+    base.update(mode="live" if live_count == total else ("partial" if live_count else "manual"),
+                basis="store", image=image or old.get("image") or p.get("image"), variants=variants)
+    return base
+
+
 PARSERS = {"apple_metrics": apple_metrics, "apple_pricekey": apple_pricekey,
            "apple_product": apple_product, "samsung": samsung}
 
@@ -198,6 +314,15 @@ def main():
         base = {k: p[k] for k in ("id", "name", "brand", "category", "gst", "note") if k in p}
         old = prev.get(p["id"], {})
         old_vars = {v["label"]: v for v in old.get("variants", [])}
+
+        if p.get("basis") == "store":
+            sp = store_product(p, old, stamp, problems)
+            if sp:
+                products.append(sp)
+                print(f"  ✓ {p['name']} [{sp['mode']}]: " + ", ".join(
+                    f"{v['label']} ${v['usd']:g}{'*' if v.get('usdManual') else ''} / ₹{v['inr']:,.0f}{'*' if v.get('inrManual') else ''}"
+                    for v in sp["variants"]))
+            continue
 
         if "manual" in p:
             base.update(mode="manual", verified=p["manual"].get("verified"),

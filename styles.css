@@ -410,3 +410,5 @@ select:focus, .input-affix:focus-within { border-color: var(--accent); }
   .prices { gap: 8px; }
   .price { padding: 10px; }
 }
+.badge--partial { background: var(--accent-soft); color: var(--accent); }
+.badge--partial::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }

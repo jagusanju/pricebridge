@@ -5,7 +5,7 @@
 A fast, responsive website comparing iPhone, iPad, Mac, Galaxy, Apple Watch, AirPods and smart TV prices between India and the US — with GST, US sales tax, live exchange rate and Indian customs duty.
 
 ## Features
-- **Prices read automatically from official stores** — apple.com, apple.com/in, samsung.com/us, samsung.com/in — with a "Live · checked X ago" badge on every product and links to the source pages
+- **Prices read automatically from official stores** — Apple, Samsung, LG and Sony (US and India) — with a "Live · checked X ago" badge on every product and links to the source pages
 - **Official product images** pulled from the same pages
 - **Full tax breakdown**: US list price + state sales tax, India MRP split into base price + GST
 - **Live USD→INR rate** (open.er-api.com, cached 6 h), manual override, offline fallback
@@ -29,7 +29,7 @@ python3 scripts/update_prices.py
 ```
 
 - If a store can't be read, the last known price is kept and the badge turns amber ("Checked 2 d ago") instead of breaking the site.
-- Products marked **Manual price** (LG, Sony TVs, Sony headphones) are typed into `catalog.json` by hand — those stores block automated reads. Update them and set `"verified"` to the date you checked.
+- **TVs and Sony products** are compared on each official store's *current selling price* (LG US/India, Samsung US, Sony India via shopatsc.com), with the MRP shown alongside. Two stores can't be read automatically — Sony US blocks automated access and Samsung India doesn't publish TV prices in its pages — so those prices are hand-entered in `catalog.json` (`{"manual": value}`) and labelled "entered by hand" on the site.
 
 ## Adding a product
 Add an entry to `catalog.json`. For Apple, point `path` at the store "buy" page and filter product names:
@@ -42,7 +42,7 @@ Add an entry to `catalog.json`. For Apple, point `path` at the store "buy" page 
 }
 ```
 
-Source types: `apple_metrics` (iPhone, iPad), `apple_pricekey` (Mac, Watch — match price keys with a regex), `apple_product` (single-price items like AirPods), `samsung` (US + India product URLs). `category` is one of `phone`, `tablet`, `laptop`, `tv`, `wearable`, `audio`.
+Source types: `apple_metrics` (iPhone, iPad), `apple_pricekey` (Mac, Watch — match price keys with a regex), `apple_product` (single-price items like AirPods), `samsung` (US + India phone pages). For store-price products (`"basis": "store"`), each variant gives a `us` and `in` page: `jsonld` (any page with schema.org product data — LG, Samsung; add `sku` to pick the size) or `shopify` (Sony India). `category` is one of `phone`, `tablet`, `laptop`, `tv`, `wearable`, `audio`.
 
 Tax rates, customs rules and categories are in `data.js`.
 
