@@ -55,7 +55,7 @@ python3 -m http.server 5173
 Then open http://localhost:5173.
 
 ## Deploying
-The site is served by GitHub Pages from the `main` branch with the custom domain in `CNAME` (pricebridge.co.in, DNS at Hostinger: four A records to GitHub Pages + `www` CNAME to jagusanju.github.io). Every push to `main` redeploys it.
+The site is served by GitHub Pages from the `main` branch with the custom domain in `CNAME` (pricebridge.co.in, DNS at Hostinger: four A records to GitHub Pages + `www` CNAME to jagusanju.github.io). Every push to `main` redeploys it. When you change `styles.css`, `app.js` or `data.js`, bump the `?v=` number on its link in `index.html` so visitors' browsers fetch the new file instead of a cached copy.
 
 The price workflow runs on its schedule; use **Actions → Update prices → Run workflow** to trigger it immediately.
 
