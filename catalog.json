@@ -1,0 +1,145 @@
+{
+  "_readme": "Product list for the price updater. 'source' products are scraped automatically from official stores by scripts/update_prices.py. 'manual' products use the usd/inr values typed here - update them by hand and set 'verified'.",
+  "products": [
+    {
+      "id": "iphone-18-pro-max", "name": "iPhone 18 Pro Max", "brand": "Apple", "category": "phone", "gst": 18,
+      "note": "US models are eSIM-only. iPhone hardware warranty is honoured internationally.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-iphone/iphone-18-pro", "require": ["iPhone 18 Pro Max "] },
+      "variants": ["256GB", "512GB", "1TB", "2TB"]
+    },
+    {
+      "id": "iphone-18-pro", "name": "iPhone 18 Pro", "brand": "Apple", "category": "phone", "gst": 18,
+      "note": "US models are eSIM-only. iPhone hardware warranty is honoured internationally.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-iphone/iphone-18-pro", "require": ["iPhone 18 Pro "], "exclude": ["Max"] },
+      "variants": ["256GB", "512GB", "1TB", "2TB"]
+    },
+    {
+      "id": "iphone-duo", "name": "iPhone Duo", "brand": "Apple", "category": "phone", "gst": 18,
+      "note": "Apple's first foldable iPhone. US models are eSIM-only.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-iphone/iphone-duo", "require": ["iPhone Duo "] },
+      "variants": ["256GB", "512GB", "1TB", "2TB"]
+    },
+    {
+      "id": "iphone-air", "name": "iPhone Air", "brand": "Apple", "category": "phone", "gst": 18,
+      "note": "eSIM-only worldwide.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-iphone/iphone-air", "require": ["iPhone Air "] },
+      "variants": ["256GB", "512GB", "1TB"]
+    },
+    {
+      "id": "iphone-17", "name": "iPhone 17", "brand": "Apple", "category": "phone", "gst": 18,
+      "note": "US models are eSIM-only. iPhone hardware warranty is honoured internationally.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-iphone/iphone-17", "require": ["iPhone 17 "] },
+      "variants": ["256GB", "512GB"]
+    },
+    {
+      "id": "iphone-17e", "name": "iPhone 17e", "brand": "Apple", "category": "phone", "gst": 18,
+      "note": "US models are eSIM-only.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-iphone/iphone-17e", "require": ["iPhone 17e "] },
+      "variants": ["256GB", "512GB"]
+    },
+    {
+      "id": "galaxy-s26-ultra", "name": "Galaxy S26 Ultra", "brand": "Samsung", "category": "phone", "gst": 18,
+      "note": "Samsung warranty is country-specific - US units may not be serviced under warranty in India.",
+      "source": { "type": "samsung", "us": "https://www.samsung.com/us/smartphones/galaxy-s26-ultra/buy/", "in": "https://www.samsung.com/in/smartphones/galaxy-s26-ultra/buy/", "inModelPrefix": "SM-S948" },
+      "variants": ["256GB", "512GB", "1TB"]
+    },
+
+    {
+      "id": "ipad-pro-11", "name": "iPad Pro 11\" (M5)", "brand": "Apple", "category": "tablet", "gst": 18,
+      "note": "iPad warranty service is limited to the country of purchase.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-ipad/ipad-pro", "require": ["11-inch iPad Pro"], "exclude": ["Cellular", "nano"] },
+      "variants": ["256GB", "512GB", "1TB", "2TB"], "suffix": " Wi-Fi"
+    },
+    {
+      "id": "ipad-air-11", "name": "iPad Air 11\" (M4)", "brand": "Apple", "category": "tablet", "gst": 18,
+      "note": "iPad warranty service is limited to the country of purchase.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-ipad/ipad-air", "require": ["11-inch iPad Air"], "exclude": ["Cellular"] },
+      "variants": ["128GB", "256GB", "512GB", "1TB"], "suffix": " Wi-Fi"
+    },
+    {
+      "id": "ipad-a16", "name": "iPad (A16)", "brand": "Apple", "category": "tablet", "gst": 18,
+      "note": "iPad warranty service is limited to the country of purchase.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-ipad/ipad", "require": ["iPad "], "exclude": ["Cellular", "Air", "Pro", "mini"] },
+      "variants": ["128GB", "256GB", "512GB"], "suffix": " Wi-Fi"
+    },
+    {
+      "id": "ipad-mini", "name": "iPad mini (A20 Pro)", "brand": "Apple", "category": "tablet", "gst": 18,
+      "note": "iPad warranty service is limited to the country of purchase.",
+      "source": { "type": "apple_metrics", "path": "/shop/buy-ipad/ipad-mini", "require": ["iPad mini", "standard glass"], "exclude": ["Cellular"] },
+      "variants": ["128GB", "256GB", "512GB"], "suffix": " Wi-Fi"
+    },
+
+    {
+      "id": "macbook-air", "name": "MacBook Air (M5)", "brand": "Apple", "category": "laptop", "gst": 18,
+      "note": "US keyboard layout. Mac warranty service is limited to the country of purchase.",
+      "source": { "type": "apple_pricekey", "path": "/shop/buy-mac/macbook-air" },
+      "variants": [
+        { "label": "13\" 8-core GPU", "key": "^13inch-[a-z]+-10-8$" },
+        { "label": "13\" 10-core GPU", "key": "^13inch-[a-z]+-10-10$" },
+        { "label": "15\"", "key": "^15inch-[a-z]+-10-10$" }
+      ]
+    },
+    {
+      "id": "macbook-pro", "name": "MacBook Pro", "brand": "Apple", "category": "laptop", "gst": 18,
+      "note": "US keyboard layout. Mac warranty service is limited to the country of purchase.",
+      "source": { "type": "apple_pricekey", "path": "/shop/buy-mac/macbook-pro" },
+      "variants": [
+        { "label": "14\" M6", "key": "^14inch-[a-z]+-standard-m6-12-12$" },
+        { "label": "14\" M5 Pro", "key": "^14inch-[a-z]+-standard-m5pro-15-16$" },
+        { "label": "16\" M5 Pro", "key": "^16inch-[a-z]+-standard-m5pro-18-20$" }
+      ]
+    },
+
+    {
+      "id": "apple-watch", "name": "Apple Watch Series 12", "brand": "Apple", "category": "wearable", "gst": 18,
+      "note": "Some health features may be region-locked.",
+      "source": { "type": "apple_pricekey", "path": "/shop/buy-watch/apple-watch" },
+      "variants": [
+        { "label": "42mm GPS", "key": "^watch_cases-aluminum-42mm-gps$" },
+        { "label": "46mm GPS", "key": "^watch_cases-aluminum-46mm-gps$" }
+      ]
+    },
+    {
+      "id": "airpods-pro-3", "name": "AirPods Pro 3", "brand": "Apple", "category": "audio", "gst": 18,
+      "note": "Hearing-health features depend on regional approval.",
+      "source": { "type": "apple_product", "path": "/shop/buy-airpods/airpods-pro-3" },
+      "variants": ["USB-C"]
+    },
+
+    {
+      "id": "lg-oled-c5", "name": "LG OLED evo C5", "brand": "LG", "category": "tv", "gst": 18,
+      "note": "TVs above 32\" are in the 18% GST slab since Sept 2025. Large TVs are hard to carry as baggage; US warranty is not valid in India.",
+      "manual": { "verified": null, "sourceUS": "https://www.lg.com/us/oled-tvs", "sourceIN": "https://www.lg.com/in/tvs/oled-tvs/" },
+      "variants": [
+        { "label": "55\"", "usd": 1799.99, "inr": 179990 },
+        { "label": "65\"", "usd": 2699.99, "inr": 269990 }
+      ]
+    },
+    {
+      "id": "samsung-qn90f", "name": "Samsung Neo QLED QN90F", "brand": "Samsung", "category": "tv", "gst": 18,
+      "note": "Tuner and app availability differ by region. US warranty is not valid in India.",
+      "manual": { "verified": null, "sourceUS": "https://www.samsung.com/us/televisions-home-theater/", "sourceIN": "https://www.samsung.com/in/tvs/" },
+      "variants": [
+        { "label": "55\"", "usd": 1799.99, "inr": 199990 },
+        { "label": "65\"", "usd": 2499.99, "inr": 279990 }
+      ]
+    },
+    {
+      "id": "sony-bravia-8-ii", "name": "Sony BRAVIA 8 II", "brand": "Sony", "category": "tv", "gst": 18,
+      "note": "US warranty is not valid in India.",
+      "manual": { "verified": null, "sourceUS": "https://electronics.sony.com/", "sourceIN": "https://shopatsc.com/" },
+      "variants": [
+        { "label": "55\"", "usd": 2799.99, "inr": 246990 },
+        { "label": "65\"", "usd": 3299.99, "inr": 341990 }
+      ]
+    },
+    {
+      "id": "sony-wh1000xm6", "name": "Sony WH-1000XM6", "brand": "Sony", "category": "audio", "gst": 18,
+      "note": "US warranty is not valid in India.",
+      "manual": { "verified": null, "sourceUS": "https://electronics.sony.com/", "sourceIN": "https://shopatsc.com/" },
+      "variants": [
+        { "label": "Standard", "usd": 449.99, "inr": 39990 }
+      ]
+    }
+  ]
+}
