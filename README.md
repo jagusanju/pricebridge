@@ -1,5 +1,7 @@
 # PriceBridge — India vs US electronics price comparison
 
+**Live site: https://pricebridge.co.in**
+
 A fast, responsive website comparing iPhone, iPad, Mac, Galaxy, Apple Watch, AirPods and smart TV prices between India and the US — with GST, US sales tax, live exchange rate and Indian customs duty.
 
 ## Features
@@ -53,9 +55,9 @@ python3 -m http.server 5173
 Then open http://localhost:5173.
 
 ## Deploying
-1. Push this folder to a GitHub repository.
-2. Turn on GitHub Pages (or connect Netlify/Vercel) for the repo.
-3. The price workflow starts running on its schedule; use **Actions → Update prices → Run workflow** to trigger it immediately.
+The site is served by GitHub Pages from the `main` branch with the custom domain in `CNAME` (pricebridge.co.in, DNS at Hostinger: four A records to GitHub Pages + `www` CNAME to jagusanju.github.io). Every push to `main` redeploys it.
+
+The price workflow runs on its schedule; use **Actions → Update prices → Run workflow** to trigger it immediately.
 
 ## Notes
 - US prices are pre-tax list prices; India prices are MRP including GST. Bank offers and retailer discounts are not included.
