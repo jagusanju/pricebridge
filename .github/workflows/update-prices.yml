@@ -1,0 +1,40 @@
+name: Update prices
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours
+  workflow_dispatch:         # allow a manual "Run workflow" button
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-prices
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch latest prices from official stores
+        run: python3 scripts/update_prices.py
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name "price-bot"
+          git config user.email "price-bot@users.noreply.github.com"
+          git add prices.js
+          # generatedAt changes on every run; only commit when a price, image or source changed
+          if git diff --cached -U0 prices.js | grep -E '^[+-] ' | grep -vqE '"(generatedAt|usdChecked|inrChecked)"'; then
+            git commit -m "Update prices $(date -u +'%Y-%m-%d %H:%M UTC')"
+          else
+            git commit -m "Refresh price check timestamps" || true
+          fi
+          git push
