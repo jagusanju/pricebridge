@@ -397,3 +397,16 @@ select:focus, .input-affix:focus-within { border-color: var(--accent); }
 .freshness { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 14px 0 0; font-size: 13px; color: var(--text-3); }
 .row a { color: var(--accent); text-decoration: none; font-weight: 600; }
 .row a:hover { text-decoration: underline; }
+
+/* ============ Small phones (≤ 400px) ============ */
+@media (max-width: 400px) {
+  .brand { gap: 8px; }
+  .brand__logo { width: 30px; height: 30px; }
+  .brand__name { font-size: 16px; }
+  .topbar__actions { gap: 6px; }
+  .rate-pill { padding: 6px 10px; font-size: 12px; gap: 6px; }
+  .icon-btn { width: 36px; height: 36px; }
+  .controls { grid-template-columns: 1fr; }
+  .prices { gap: 8px; }
+  .price { padding: 10px; }
+}
