@@ -8,8 +8,39 @@ window.PRICE_DATA = {
 
   // India customs rules for personal baggage (approximate, for guidance only)
   customs: {
-    allowanceInr: 50000,   // duty-free allowance per adult passenger
+    allowanceInr: 75000,   // duty-free allowance per adult passenger (Baggage Rules 2026, from 2 Feb 2026; was ₹50,000)
     dutyRate: 38.5         // 35% basic customs duty + 10% social welfare surcharge on it
+  },
+
+  /*
+   * Gold — India customs & tax rules (simplified; verify with CBIC before travelling)
+   *  - Duty-free jewellery (Baggage Rules 2026, from 2 Feb 2026): 40 g women / 20 g others,
+   *    only for passengers who lived abroad more than 1 year. Jewellery only — not coins or bars.
+   *  - "Eligible passenger" (abroad 6+ months): up to 1 kg of gold in any form at a concessional
+   *    rate, paid in foreign currency. Import duty on gold rose from 6% to 15% (10% BCD + 5% AIDC)
+   *    on 13 May 2026; some customs offices list 16.5% for passengers.
+   *  - Anyone else: gold above the allowance is charged the general baggage rate (~38.5%).
+   *  - India GST: 3% on gold value, 5% on making charges.
+   */
+  gold: {
+    jewelFreeGrams: { woman: 40, other: 20 },
+    jewelFreeMinMonths: 12,
+    eligibleMinMonths: 6,
+    eligibleMaxGrams: 1000,
+    eligibleRate: 15,
+    otherRate: 38.5,
+    gstGold: 3,
+    gstMaking: 5,
+    defaultMaking: 8,         // % making charges on jewellery, editable on the page
+    spotPremium: 3,           // % dealer premium over the international price for coins/bars (US, UK, Singapore)
+    // Tax on gold abroad: investment gold (24K coins/bars) vs jewellery
+    tax: {
+      us: { coin: 0, jewel: "state", note: "Investment gold is sales-tax-exempt in most US states; jewellery pays state sales tax." },
+      ae: { coin: 0, jewel: 5, note: "Investment gold (99%+) is zero-rated for VAT; jewellery pays 5% VAT, which tourists can partly reclaim." },
+      sg: { coin: 0, jewel: 9, note: "Investment-grade gold is GST-exempt; jewellery pays 9% GST, which tourists can reclaim via eTRS." },
+      uk: { coin: 0, jewel: 20, note: "Investment gold is VAT-exempt; jewellery pays 20% VAT with no tourist refund." },
+      th: { coin: 0, jewel: 7, jewelOnMakingOnly: true, note: "Gold bars are VAT-free; on jewellery, 7% VAT applies to the making/margin, not the gold." }
+    }
   },
 
   /*

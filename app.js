@@ -413,7 +413,7 @@
         <div class="row"><span>You pay</span><span>${esc(money(t.c.cur, t.netLocal))}</span></div>
         <div class="row row--muted"><span>Rate ${esc(money(t.c.cur, 1))} = ₹${(state.fx.INR / state.fx[t.c.cur]).toFixed(2)}${state.forexFee ? ` + ${state.forexFee}% card fee` : ""}</span><span>× ${t.rate.toFixed(2)}</span></div>
         <div class="row"><span>In rupees</span><span>${inr(t.netInr)}</span></div>
-        ${state.customs ? `<div class="row"><span>Customs duty (${D.customs.dutyRate}% above ₹50,000)</span><span>+ ${inr(t.duty)}</span></div>` : ""}
+        ${state.customs ? `<div class="row"><span>Customs duty (${D.customs.dutyRate}% above ${inr(D.customs.allowanceInr)})</span><span>+ ${inr(t.duty)}</span></div>` : ""}
         <div class="row row--total"><span>${state.customs ? "Landed cost in India" : "Total cost"}</span><span>${inr(t.landed)}</span></div>
       </div>` : `<div class="note"><span>ℹ️</span><span>No foreign price to compare for this variant.</span></div>`}
 
@@ -454,7 +454,7 @@
 
       ${t ? `<div class="note note--refund"><span>🧾</span><span>${esc(t.c.refundNote)}</span></div>` : ""}
       ${p.note ? `<div class="note"><span>💡</span><span><b>Good to know:</b> ${esc(p.note)}</span></div>` : ""}
-      ${t && !state.customs && t.netInr > D.customs.allowanceInr ? `<div class="note"><span>🧳</span><span><b>Carrying it home?</b> This is above the ₹50,000 duty-free allowance — with customs duty it would cost about ${inr(t.netInr + ((t.netInr - D.customs.allowanceInr) * D.customs.dutyRate) / 100)}.</span></div>` : ""}
+      ${t && !state.customs && t.netInr > D.customs.allowanceInr ? `<div class="note"><span>🧳</span><span><b>Carrying it home?</b> This is above the ${inr(D.customs.allowanceInr)} duty-free allowance — with customs duty it would cost about ${inr(t.netInr + ((t.netInr - D.customs.allowanceInr) * D.customs.dutyRate) / 100)}.</span></div>` : ""}
 
       ${t ? `<div class="sheet__cta"><button class="btn btn--primary btn--block" data-act="basket">${I.bag} Add to trip basket (${t.c.flag} ${esc(t.c.short)})</button></div>` : ""}
     `;
@@ -614,7 +614,7 @@
           </div>`).join("")}
       </div>
       <div class="breakdown">
-        <div class="row"><span>Adults travelling (each gets ₹50,000 duty-free)</span>
+        <div class="row"><span>Adults travelling (each gets ${inr(D.customs.allowanceInr)} duty-free)</span>
           <span class="stepper"><button data-trav="-1" aria-label="Fewer travellers">−</button><b>${state.travellers}</b><button data-trav="1" aria-label="More travellers">+</button></span></div>
         <div class="row"><span>Bought abroad (after tax${state.refund ? " & refunds" : ""})</span><span>${inr(abroad)}</span></div>
         <div class="row row--muted"><span>Duty-free allowance</span><span>− ${inr(Math.min(abroad, allowance))}</span></div>

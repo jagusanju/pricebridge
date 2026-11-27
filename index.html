@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%236d5efc'/><path d='M9 20l5-5 4 4 6-7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PriceBridge","url":"https://pricebridge.co.in/","description":"Compare electronics prices between India and the US, UAE, Singapore, UK and Thailand including all taxes and customs duty."}</script>
 </head>
@@ -56,7 +56,11 @@
   <main id="main">
     <section class="hero">
       <div class="container">
-        <span class="eyebrow">🇮🇳 India vs 🇺🇸 🇦🇪 🇸🇬 🇬🇧 🇹🇭</span>
+        <nav class="section-tabs" aria-label="Sections">
+          <a href="./" aria-current="page">📱 Electronics</a>
+          <a href="gold.html">🪙 Gold</a>
+        </nav>
+        <div><span class="eyebrow eyebrow--sub">🇮🇳 India vs 🇺🇸 🇦🇪 🇸🇬 🇬🇧 🇹🇭</span></div>
         <h1>Is it cheaper to buy it<br /><span class="grad">abroad or in India?</span></h1>
         <p class="hero__sub">Real landed cost for iPhones, iPads, Macs, Galaxy phones, TVs and more — with GST, VAT, sales tax, tourist refunds, live exchange rates and Indian customs duty all worked out.</p>
 
@@ -106,7 +110,7 @@
           <span class="switch__track"><span class="switch__thumb"></span></span>
           <span class="switch__text">
             <strong>Add India customs duty</strong>
-            <small>38.5% above ₹50,000 allowance</small>
+            <small>38.5% above ₹75,000 allowance</small>
           </span>
         </label>
       </div>
@@ -156,7 +160,7 @@
         <article>
           <span class="info__num">4</span>
           <h3>Customs (optional)</h3>
-          <p>Each adult can bring ₹50,000 of goods duty-free. Above that, about 38.5% duty. Use the trip basket to add up several items.</p>
+          <p>Each adult can bring ₹75,000 of goods duty-free (Baggage Rules 2026). Above that, about 38.5% duty. Use the trip basket to add up several items.</p>
         </article>
       </div>
 
@@ -168,7 +172,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container">© <span id="year"></span> PriceBridge · Made for smart shoppers · <a href="sitemap.xml">All products</a></div>
+    <div class="container">© <span id="year"></span> PriceBridge · Made for smart shoppers · <a href="gold.html">Gold rates</a> · <a href="sitemap.xml">All products</a></div>
   </footer>
 
   <!-- Compare tray -->
@@ -186,8 +190,8 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=4"></script>
+  <script src="data.js?v=5"></script>
   <script src="prices.js"></script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

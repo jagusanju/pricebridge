@@ -247,6 +247,133 @@ def shopify(spec):
 STORE_PARSERS = {"jsonld": jsonld_offer, "shopify": shopify}
 
 
+# ================================================================ gold
+OZ = 31.1034768        # grams per troy ounce
+BAHT_WEIGHT = 15.244   # grams in one Thai baht-weight of gold
+
+
+def gold_spot():
+    """International gold price (USD per troy ounce) from gold-api.com (free, public)."""
+    d = json.loads(fetch("https://api.gold-api.com/price/XAU"))
+    return float(d["price"]), d.get("updatedAt")
+
+
+def gold_india():
+    """IBJA (India Bullion & Jewellers Association) per-gram rates, excluding GST."""
+    url = "https://ibjarates.com/"
+    page = fetch(url)
+    k24 = re.search(r'id="GoldRatesCompare999"[^>]*>\s*([\d,.]+)', page)
+    k22 = re.search(r'id="GoldRatesCompare916"[^>]*>\s*([\d,.]+)', page)
+    if not k24:
+        raise RuntimeError("IBJA 999 rate not found")
+    out = {"k24": first_number(k24.group(1)), "cur": "INR", "src": url,
+           "basis": "IBJA rate per gram, excluding 3% GST and making charges"}
+    out["k22"] = first_number(k22.group(1)) if k22 else round(out["k24"] * 0.916, 2)
+    return out
+
+
+def gold_dubai():
+    """Dubai City of Gold 'suggested retail' rates (AED per gram, before 5% VAT and making)."""
+    url = "https://www.dubaicityofgold.com/"
+    text = htmlmod.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", "", fetch(url), flags=re.S)))
+    text = re.sub(r"\s+", " ", text)
+    k24 = re.search(r"24K Gold AED\s*([\d,.]+)", text)
+    k22 = re.search(r"22K Gold AED\s*([\d,.]+)", text)
+    if not (k24 and k22):
+        raise RuntimeError("Dubai rates not found")
+    return {"k24": first_number(k24.group(1)), "k22": first_number(k22.group(1)), "cur": "AED", "src": url,
+            "basis": "Dubai City of Gold suggested retail rate per gram, before 5% VAT and making charges"}
+
+
+def gold_thailand():
+    """Gold Traders Association of Thailand: 96.5% gold bar selling price per baht-weight."""
+    url = "https://www.goldtraders.or.th/"
+    sells = re.findall(r'ขายออก</span>\s*<span[^>]*>\s*([\d,]+\.\d+)', fetch(url))
+    if not sells:
+        raise RuntimeError("Thai gold bar price not found")
+    bar = first_number(sells[0])           # 96.5% bar, per baht-weight
+    k24 = bar / BAHT_WEIGHT / 0.965
+    return {"k24": round(k24, 2), "k22": round(k24 * 0.916, 2), "bar965": bar, "cur": "THB", "src": url,
+            "basis": "Gold Traders Association 96.5% bar price, converted to 24K per gram"}
+
+
+def build_gold(fx, prev, stamp, problems):
+    old = (prev or {}).get("gold") or {}
+    gold = {"t": stamp, "local": {}}
+    try:
+        spot, spot_t = gold_spot()
+        gold.update(spotUsdOz=spot, spotT=spot_t or stamp, spotSrc="https://gold-api.com/")
+    except Exception as e:  # noqa: BLE001
+        problems.append(f"gold spot: {e}")
+        if old.get("spotUsdOz"):
+            gold.update(spotUsdOz=old["spotUsdOz"], spotT=old.get("spotT"), spotSrc=old.get("spotSrc"), spotStale=True)
+    for cc, fn in (("in", gold_india), ("ae", gold_dubai), ("th", gold_thailand)):
+        try:
+            gold["local"][cc] = dict(fn(), c=stamp)
+        except Exception as e:  # noqa: BLE001
+            problems.append(f"gold {cc}: {e}")
+            if old.get("local", {}).get(cc):
+                gold["local"][cc] = dict(old["local"][cc], stale=True)
+    # No single official retail rate in the US, UK or Singapore: use the international price
+    if gold.get("spotUsdOz") and fx:
+        for cc, cur in (("us", "USD"), ("uk", "GBP"), ("sg", "SGD")):
+            k24 = gold["spotUsdOz"] / OZ * fx[cur]
+            gold["local"][cc] = {"k24": round(k24, 2), "k22": round(k24 * 0.916, 2), "cur": cur, "spot": True,
+                                 "basis": "International gold price (dealers add a premium)", "src": "https://gold-api.com/", "c": stamp}
+    print("  ✓ Gold: spot $%s/oz; " % gold.get("spotUsdOz") + "  ".join(
+        f"{cc.upper()} {v['k24']:g}" for cc, v in gold["local"].items()))
+    return gold
+
+
+def write_gold_page(gold, fx, stamp):
+    """Static, search-friendly summary page at /p/gold/ (the interactive tool is /gold.html)."""
+    if not (gold.get("local", {}).get("in") and fx):
+        return
+    e = htmlmod.escape
+    inr = lambda cur: fx["INR"] / fx[cur]  # noqa: E731
+    india = gold["local"]["in"]
+    india24 = india["k24"] * 1.03
+    rows = []
+    for cc in ["in", "ae", "th", "sg", "us", "uk"]:
+        g = gold["local"].get(cc)
+        if not g:
+            continue
+        per_g_inr = g["k24"] * inr(g["cur"])
+        diff = "" if cc == "in" else f"{(india24 - per_g_inr) / india24 * 100:.1f}% cheaper" if per_g_inr < india24 else f"{(per_g_inr - india24) / india24 * 100:.1f}% dearer"
+        rows.append(f"<tr><td>{e(COUNTRY_NAME[cc])}</td><td>{e(money(cc, g['k24']))}</td><td>{e(money('in', per_g_inr))}</td><td>{e(diff)}</td></tr>")
+    ae = gold["local"].get("ae")
+    ae_inr = ae["k24"] * inr("AED") if ae else None
+    title = f"Gold rate today: India vs Dubai, Singapore, US, UK & Thailand ({stamp[:10]}) | PriceBridge"
+    desc = (f"24K gold: {money('in', india['k24'])}/g in India (+3% GST)"
+            + (f" vs AED {ae['k24']:,.2f}/g in Dubai (≈ {money('in', ae_inr)}/g)" if ae else "")
+            + ". Compare gold rates and customs duty for bringing gold to India.")
+    page = f"""<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(title)}</title>
+<meta name="description" content="{e(desc)}">
+<link rel="canonical" href="{SITE}/p/gold/">
+<meta property="og:title" content="Gold rate today — India vs Dubai & more"><meta property="og:description" content="{e(desc)}">
+<meta property="og:image" content="{SITE}/og-image.png"><meta name="twitter:card" content="summary_large_image">
+<style>body{{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f6f7fb;color:#0f1222}}
+main{{max-width:760px;margin:0 auto;padding:28px 16px}}a.btn{{display:inline-block;background:#6d5efc;color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:600}}
+table{{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;margin:18px 0}}td,th{{padding:12px 14px;border-bottom:1px solid #e3e6ef;text-align:left}}small{{color:#8a90a6}}
+@media (prefers-color-scheme:dark){{body{{background:#0b0d12;color:#f2f4fa}}table{{background:#14171f}}td,th{{border-color:#252a37}}}}</style>
+</head><body><main>
+<p><a href="/">← PriceBridge</a></p>
+<h1>Gold rate today: India vs abroad</h1>
+<p>{e(desc)}</p>
+<table><tr><th>Country</th><th>24K per gram</th><th>≈ in rupees</th><th>vs India (incl. GST)</th></tr>{''.join(rows)}</table>
+<p><a class="btn" href="/gold.html">Calculate jewellery &amp; customs duty →</a></p>
+<p><small>Updated {stamp[:16].replace('T', ' ')} UTC. India: IBJA rate excl. 3% GST. Dubai: Dubai City of Gold suggested retail rate excl. VAT. Thailand: Gold Traders Association bar price. US, UK, Singapore: international gold price. Bringing gold into India: duty-free jewellery is 40 g (women) / 20 g (others) after 1+ year abroad; above that, customs duty applies — use the calculator.</small></p>
+</main></body></html>
+"""
+    d = os.path.join(ROOT, "p", "gold")
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+        f.write(page)
+
+
 # ================================================================ build
 def load_previous():
     try:
@@ -335,7 +462,7 @@ def build_store(p, old_vars, stamp, problems):
     return variants, image
 
 
-def update_history(products, stamp):
+def update_history(products, stamp, gold=None):
     try:
         hist = json.load(open(HISTORY, encoding="utf-8"))
     except Exception:  # noqa: BLE001
@@ -353,6 +480,15 @@ def update_history(products, stamp):
                 else:
                     series.append([day, e["a"]])
                 del series[:-400]
+    for cc, g in ((gold or {}).get("local") or {}).items():
+        if g.get("stale"):
+            continue
+        series = hist.setdefault(f"gold|24K|{cc}", [])
+        if series and series[-1][0] == day:
+            series[-1][1] = g["k24"]
+        else:
+            series.append([day, g["k24"]])
+        del series[:-400]
     with open(HISTORY, "w", encoding="utf-8") as f:
         json.dump(hist, f, separators=(",", ":"))
 
@@ -375,7 +511,7 @@ def money(cc, a):
 
 def write_pages(products, fx, stamp):
     e = htmlmod.escape
-    urls = [SITE + "/"]
+    urls = [SITE + "/", SITE + "/gold.html", SITE + "/p/gold/"]
     for p in products:
         v = p["variants"][0]
         rows, best = [], None
@@ -466,13 +602,15 @@ def main():
             f"{cc.upper()} {e['a']:g}{'*' if e.get('m') else ''}{'~' if e.get('stale') else ''}" for cc, e in v0["p"].items()))
 
     fx = fetch_fx()
-    out = {"generatedAt": stamp, "fx": fx, "products": products, "problems": problems}
+    gold = build_gold(fx, load_previous(), stamp, problems)
+    out = {"generatedAt": stamp, "fx": fx, "gold": gold, "products": products, "problems": problems}
     with open(OUTPUT, "w", encoding="utf-8") as f:
         f.write("/* Generated by scripts/update_prices.py - do not edit by hand. Edit catalog.json instead. */\n")
         f.write("window.PRICES = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
-    update_history(products, stamp)
+    update_history(products, stamp, gold)
     if fx:
         write_pages(products, fx, stamp)
+        write_gold_page(gold, fx, stamp)
     print(f"\nWrote {len(products)} products (* = entered by hand, ~ = last known price)")
     if problems:
         print("Problems:\n  - " + "\n  - ".join(problems))

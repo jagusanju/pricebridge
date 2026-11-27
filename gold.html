@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Gold rate today: India vs Dubai, Singapore, US, UK, Thailand — with customs duty | PriceBridge</title>
+  <meta name="description" content="Is gold cheaper in Dubai than India? Today's 24K and 22K gold rates in India, Dubai, Singapore, the US, the UK and Thailand, plus a calculator for making charges, VAT refunds and Indian customs duty (Baggage Rules 2026)." />
+  <link rel="canonical" href="https://pricebridge.co.in/gold.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PriceBridge" />
+  <meta property="og:title" content="Is gold cheaper in Dubai? Gold rate India vs abroad" />
+  <meta property="og:description" content="Today's gold rates in 6 countries, with making charges, VAT refunds and Indian customs duty worked out." />
+  <meta property="og:url" content="https://pricebridge.co.in/gold.html" />
+  <meta property="og:image" content="https://pricebridge.co.in/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%236d5efc'/><path d='M9 20l5-5 4 4 6-7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+</head>
+<body class="page-gold">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./" aria-label="PriceBridge home">
+        <span class="brand__logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 4 7-8" /></svg></span>
+        <span class="brand__name">Price<b>Bridge</b></span>
+      </a>
+      <div class="topbar__actions">
+        <div class="rate-pill" id="spotPill" title="International gold price">
+          <span class="rate-pill__dot" id="spotDot"></span>
+          <span id="spotText">Gold —</span>
+        </div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero hero--gold">
+      <div class="container">
+        <nav class="section-tabs" aria-label="Sections">
+          <a href="./">📱 Electronics</a>
+          <a href="gold.html" aria-current="page">🪙 Gold</a>
+        </nav>
+        <h1>Is gold cheaper<br /><span class="grad grad--gold">in Dubai than in India?</span></h1>
+        <p class="hero__sub">Today's gold rates in India, Dubai, Singapore, the US, the UK and Thailand — with making charges, VAT, tourist refunds and Indian customs duty under the 2026 baggage rules.</p>
+        <div class="gold-hero" id="goldHero"></div>
+        <p class="freshness" id="goldFresh"></p>
+      </div>
+    </section>
+
+    <section class="container">
+      <h2 class="section-h2">Today's gold rates <small>per gram</small></h2>
+      <div class="table-wrap"><table class="cmp cmp--gold" id="ratesTable"></table></div>
+      <p class="disclaimer" id="ratesNote"></p>
+    </section>
+
+    <section class="container calc" aria-labelledby="calcTitle">
+      <h2 class="section-h2" id="calcTitle">Gold calculator <small>buying abroad &amp; bringing it home</small></h2>
+      <div class="calc__grid">
+        <div class="calc__inputs">
+          <div class="field">
+            <span class="field__label">What are you buying?</span>
+            <div class="seg" id="typeSeg">
+              <button data-v="jewel" aria-pressed="true">💍 Jewellery (22K)</button>
+              <button data-v="coin" aria-pressed="false">🪙 Coins / bars (24K)</button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="grams">Weight</label>
+            <div class="input-affix"><input id="grams" type="number" min="1" max="5000" step="1" inputmode="decimal" value="20" /><span>grams</span></div>
+            <div class="quick" id="quickGrams"></div>
+          </div>
+          <div class="field" id="makingField">
+            <label class="field__label" for="making">Making charges</label>
+            <div class="input-affix"><input id="making" type="number" min="0" max="40" step="0.5" inputmode="decimal" /><span>% of gold value</span></div>
+            <small class="field__hint">Typical: 6–12% for chains and bangles, 12–25% for detailed designs. Applied in every country so the comparison is fair.</small>
+          </div>
+          <div class="field">
+            <span class="field__label">Who is carrying it?</span>
+            <div class="seg" id="genderSeg">
+              <button data-v="woman" aria-pressed="true">👩 Woman</button>
+              <button data-v="other" aria-pressed="false">👨 Man / other</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field__label">How long have you lived abroad?</span>
+            <div class="seg seg--3" id="staySeg">
+              <button data-v="3" aria-pressed="false">Under 6 months</button>
+              <button data-v="9" aria-pressed="false">6–12 months</button>
+              <button data-v="24" aria-pressed="true">Over 1 year</button>
+            </div>
+            <small class="field__hint">Short trips (e.g. a holiday in Dubai) count as "under 6 months".</small>
+          </div>
+          <div class="field field--row">
+            <label class="switch">
+              <input type="checkbox" id="refundToggle" />
+              <span class="switch__track"><span class="switch__thumb"></span></span>
+              <span class="switch__text"><strong>Claim tourist VAT refund</strong><small>Jewellery in Dubai, Singapore, Thailand</small></span>
+            </label>
+          </div>
+          <div class="field field--two">
+            <div>
+              <label class="field__label" for="forexInput">Card forex fee</label>
+              <div class="input-affix"><input id="forexInput" type="number" step="0.25" min="0" max="10" inputmode="decimal" /><span>%</span></div>
+            </div>
+            <div>
+              <label class="field__label" for="stateSelect">US state (sales tax)</label>
+              <select id="stateSelect"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc__results">
+          <div class="customs-box" id="customsBox"></div>
+          <div class="results" id="results"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <h2 class="section-h2">24K rate history</h2>
+      <div class="breakdown"><div class="spark-box" id="goldHistory"><div class="spark__empty">Loading…</div></div></div>
+    </section>
+
+    <section class="container info">
+      <h2>Bringing gold into India — the rules</h2>
+      <div class="info__grid">
+        <article>
+          <span class="info__num">1</span>
+          <h3>Duty-free jewellery</h3>
+          <p>If you've lived abroad <b>more than a year</b>: <b>40 g</b> (women) or <b>20 g</b> (others) of jewellery, duty-free — no value limit since the Baggage Rules 2026 (from 2 Feb 2026).</p>
+        </article>
+        <article>
+          <span class="info__num">2</span>
+          <h3>Coins &amp; bars</h3>
+          <p>Gold coins, bars and biscuits get <b>no</b> duty-free allowance — they're always dutiable and must be declared.</p>
+        </article>
+        <article>
+          <span class="info__num">3</span>
+          <h3>Abroad 6+ months</h3>
+          <p>"Eligible passengers" can bring up to <b>1 kg</b> at a concessional rate — about <b>15%</b> since 13 May 2026 — paid in <b>foreign currency</b>.</p>
+        </article>
+        <article>
+          <span class="info__num">4</span>
+          <h3>Short trips</h3>
+          <p>On a holiday or business trip under 6 months, gold above the allowance is charged the baggage rate of about <b>38.5%</b> — usually wiping out any saving.</p>
+        </article>
+      </div>
+      <p class="disclaimer">Customs rules are simplified for guidance only and change often (the gold duty rose from 6% to 15% on 13 May 2026; some customs offices list 16.5% for passengers). Always check the latest CBIC rules and declare gold at the red channel — undeclared gold can be confiscated and fined. Gold rates: IBJA (India, excl. GST), Dubai City of Gold (suggested retail, excl. VAT), Gold Traders Association (Thailand), gold-api.com international price (US, UK, Singapore — dealers add a premium). Rates change through the day; check with the jeweller before buying.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span id="year"></span> PriceBridge · <a href="./">Electronics</a> · <a href="p/gold/">Today's gold rates</a></div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js?v=5"></script>
+  <script src="prices.js"></script>
+  <script src="gold.js?v=1"></script>
+</body>
+</html>
